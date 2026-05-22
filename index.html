@@ -38,8 +38,9 @@
   .card.hidden { display: none; }
   .more-btn { display: block; width: 100%; padding: 0.75rem; margin-bottom: 2rem; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-weight: 500; color: var(--text-muted); cursor: pointer; text-align: center; transition: background 0.15s; }
   .more-btn:hover { background: var(--bg); }
-  .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; display: flex; align-items: flex-start; gap: 14px; transition: box-shadow 0.15s; }
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; display: flex; align-items: flex-start; gap: 14px; transition: box-shadow 0.15s, border-color 0.15s; cursor: pointer; }
   .card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .card.active { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-light); }
   .card-emoji { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
   .card-body { flex: 1; min-width: 0; }
   .card-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
@@ -240,7 +241,7 @@
 </div>
 
 <footer>
-  © 엔티켓 (주)엔엔터테인먼트 · 인천광역시 남동구 문화서로4번길 66, 지하1층
+  © 엔티켓 (주)엔엔터테인먼트 · 인천광역시 남동구 예술로 149 인천문화예술회관
 </footer>
 
 <script>
@@ -276,17 +277,56 @@
     { name: '황소야',            lat: 37.4470848, lng: 126.6967371 }
   ];
 
-  locations.forEach(function(loc) {
+  var markers = [];
+  var infowindows = [];
+  var currentOpenIW = null;
+
+  locations.forEach(function(loc, i) {
     var marker = new naver.maps.Marker({
       position: new naver.maps.LatLng(loc.lat, loc.lng),
       map: map,
-      title: loc.name
+      title: loc.name,
+      icon: {
+        content: '<div style="width:12px;height:12px;border-radius:50%;background:#C94B3A;border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>',
+        anchor: new naver.maps.Point(6, 6)
+      }
     });
     var infowindow = new naver.maps.InfoWindow({
-      content: '<div style="padding:6px 10px;font-size:13px;font-weight:700;">' + loc.name + '</div>'
+      content: '<div style="padding:6px 10px;font-size:13px;font-weight:700;white-space:nowrap;">' + loc.name + '</div>'
     });
     naver.maps.Event.addListener(marker, 'click', function() {
-      infowindow.open(map, marker);
+      focusLocation(i);
+    });
+    markers.push(marker);
+    infowindows.push(infowindow);
+  });
+
+  function focusLocation(i) {
+    // 모든 카드 active 해제
+    document.querySelectorAll('.card').forEach(function(c) { c.classList.remove('active'); });
+    // 해당 카드 active
+    var cards = document.querySelectorAll('.card');
+    if (cards[i]) cards[i].classList.add('active');
+
+    // 지도 이동
+    map.setCenter(new naver.maps.LatLng(locations[i].lat, locations[i].lng));
+    map.setZoom(19);
+
+    // 기존 인포윈도우 닫기
+    if (currentOpenIW !== null) infowindows[currentOpenIW].close();
+
+    // 해당 인포윈도우 열기
+    infowindows[i].open(map, markers[i]);
+    currentOpenIW = i;
+
+    // 지도로 스크롤
+    document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // 카드에 클릭 이벤트 연결
+  document.querySelectorAll('.card').forEach(function(card, i) {
+    card.addEventListener('click', function() {
+      focusLocation(i);
     });
   });
 </script>
