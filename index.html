@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=sr3c3r0mbt"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -120,12 +121,11 @@
     border: 1px solid var(--border);
     margin-bottom: 2rem;
     height: 260px;
+    position: relative;
   }
-  .map-wrap iframe {
+  #map {
     width: 100%;
     height: 100%;
-    border: none;
-    display: block;
   }
 
   /* 음식점 카드 */
@@ -247,12 +247,7 @@
 
   <div class="section-title">📍 참여 업체 위치</div>
   <div class="map-wrap">
-    <iframe
-      src="https://maps.google.com/maps?q=인천광역시+남동구+예술로+149&z=16&output=embed"
-      allowfullscreen
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade">
-    </iframe>
+    <div id="map"></div>
   </div>
 
   <div class="section-title">🍽️ 참여 업체 할인 혜택</div>
@@ -357,6 +352,39 @@
 <footer>
   © 엔티켓 (주)엔엔터테인먼트 · 인천광역시 남동구 예술로 149 인천문화예술회관
 </footer>
+
+<script>
+  var map = new naver.maps.Map('map', {
+    center: new naver.maps.LatLng(37.4481, 126.7052),
+    zoom: 17,
+    mapTypeId: naver.maps.MapTypeId.NORMAL
+  });
+
+  var locations = [
+    { name: '연빛 구월',       lat: 37.4483, lng: 126.7045 },
+    { name: '방이사브칼국수', lat: 37.4482, lng: 126.7058 },
+    { name: '광명숯불갈비',   lat: 37.4479, lng: 126.7048 },
+    { name: '금별맥주',       lat: 37.4481, lng: 126.7055 },
+    { name: '휘피케이크',     lat: 37.4484, lng: 126.7051 },
+    { name: '착한소곱창',     lat: 37.4478, lng: 126.7053 },
+    { name: '족발신선생',     lat: 37.4480, lng: 126.7060 },
+    { name: '79포차',         lat: 37.4476, lng: 126.7047 }
+  ];
+
+  locations.forEach(function(loc) {
+    var marker = new naver.maps.Marker({
+      position: new naver.maps.LatLng(loc.lat, loc.lng),
+      map: map,
+      title: loc.name
+    });
+    var infowindow = new naver.maps.InfoWindow({
+      content: '<div style="padding:6px 10px;font-size:13px;font-weight:700;">' + loc.name + '</div>'
+    });
+    naver.maps.Event.addListener(marker, 'click', function() {
+      infowindow.open(map, marker);
+    });
+  });
+</script>
 
 </body>
 </html>
