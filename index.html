@@ -34,7 +34,10 @@
   .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
   .map-wrap { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-bottom: 2rem; height: 300px; position: relative; }
   #map { width: 100%; height: 100%; }
-  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-bottom: 2rem; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-bottom: 1rem; }
+  .card.hidden { display: none; }
+  .more-btn { display: block; width: 100%; padding: 0.75rem; margin-bottom: 2rem; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-weight: 500; color: var(--text-muted); cursor: pointer; text-align: center; transition: background 0.15s; }
+  .more-btn:hover { background: var(--bg); }
   .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; display: flex; align-items: flex-start; gap: 14px; transition: box-shadow 0.15s; }
   .card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
   .card-emoji { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
@@ -110,7 +113,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card hidden">
       <div class="card-emoji">🐟</div>
       <div class="card-body">
         <div class="card-name">인천집</div>
@@ -119,7 +122,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card hidden">
       <div class="card-emoji">🥓</div>
       <div class="card-body">
         <div class="card-name">마포주먹고기</div>
@@ -128,7 +131,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card hidden">
       <div class="card-emoji">🥞</div>
       <div class="card-body">
         <div class="card-name">종로빈대떡</div>
@@ -137,7 +140,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card hidden">
       <div class="card-emoji">🐦</div>
       <div class="card-body">
         <div class="card-name">신마포갈매기</div>
@@ -146,7 +149,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card hidden">
       <div class="card-emoji">🍢</div>
       <div class="card-body">
         <div class="card-name">흥성양꼬치</div>
@@ -155,7 +158,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card hidden">
       <div class="card-emoji">🐷</div>
       <div class="card-body">
         <div class="card-name">족장</div>
@@ -164,7 +167,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card hidden">
       <div class="card-emoji">🍲</div>
       <div class="card-body">
         <div class="card-name">명가양선지해장국</div>
@@ -173,7 +176,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card hidden">
       <div class="card-emoji">🥬</div>
       <div class="card-body">
         <div class="card-name">전주보쌈</div>
@@ -182,7 +185,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card hidden">
       <div class="card-emoji">🍜</div>
       <div class="card-body">
         <div class="card-name">방이샤브샤브칼국수</div>
@@ -191,7 +194,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card hidden">
       <div class="card-emoji">🐖</div>
       <div class="card-body">
         <div class="card-name">까망돼지</div>
@@ -200,7 +203,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card hidden">
       <div class="card-emoji">🍖</div>
       <div class="card-body">
         <div class="card-name">대구반야월막창</div>
@@ -209,7 +212,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card hidden">
       <div class="card-emoji">🐄</div>
       <div class="card-body">
         <div class="card-name">황소야</div>
@@ -219,6 +222,8 @@
     </div>
 
   </div>
+
+  <button class="more-btn" id="more-btn" onclick="showAll()">▼ 참여 업체 더보기 (12개)</button>
 
   <div class="section-title">📋 안내사항</div>
   <div class="notice">
@@ -235,10 +240,17 @@
 </div>
 
 <footer>
-  © 엔티켓 (주)엔엔터테인먼트 · 인천광역시 남동구 예술로 149 인천문화예술회관
+  © 엔티켓 (주)엔엔터테인먼트 · 인천광역시 남동구 문화서로4번길 66, 지하1층
 </footer>
 
 <script>
+  function showAll() {
+    document.querySelectorAll('.card.hidden').forEach(function(el) {
+      el.style.display = 'flex';
+    });
+    document.getElementById('more-btn').style.display = 'none';
+  }
+
   var map = new naver.maps.Map('map', {
     center: new naver.maps.LatLng(37.4472, 126.6975),
     zoom: 17,
