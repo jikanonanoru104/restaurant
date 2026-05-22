@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>공연 관람객 맛집 할인 혜택 | 엔티켓 × 구월문화로상인회</title>
+<title>공연 관람객 맛집 할인 혜택 | 엔티켓 × 구월동 문화로</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -224,7 +224,8 @@
 
   </div>
 
-  <button class="more-btn" id="more-btn" onclick="showAll()">▼ 참여 업체 더보기 (12개)</button>
+  <button class="more-btn" id="more-btn" onclick="showAll()">▼ 참여 업체 더보기 (<span id="hidden-count"></span>개)</button>
+  <button class="more-btn" id="less-btn" style="display:none;" onclick="hideAll()">▲ 접기</button>
 
   <div class="section-title">📋 안내사항</div>
   <div class="notice">
@@ -245,11 +246,24 @@
 </footer>
 
 <script>
+  // 숨겨진 카드 수 자동 계산
+  var hiddenCards = document.querySelectorAll('.card.hidden');
+  document.getElementById('hidden-count').textContent = hiddenCards.length;
+
   function showAll() {
     document.querySelectorAll('.card.hidden').forEach(function(el) {
       el.style.display = 'flex';
     });
     document.getElementById('more-btn').style.display = 'none';
+    document.getElementById('less-btn').style.display = 'block';
+  }
+
+  function hideAll() {
+    document.querySelectorAll('.card.hidden').forEach(function(el) {
+      el.style.display = 'none';
+    });
+    document.getElementById('more-btn').style.display = 'block';
+    document.getElementById('less-btn').style.display = 'none';
   }
 
   var map = new naver.maps.Map('map', {
