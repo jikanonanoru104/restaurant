@@ -171,7 +171,10 @@ section + section { margin-top: var(--x10); }
 
 /* ── Map surface ───────────────────────────────────────────── */
 .map-surface {
-  position: relative; height: 320px; overflow: hidden;
+  /* isolation + z-index로 자체 쌓임 맥락을 만듦 — 네이버 지도가 심는 로고·저작권·축척
+     컨트롤이 매우 큰 z-index를 쓰는데, 이게 없으면 sticky 헤더(z-index:100) 위로 뚫고 올라옴 */
+  position: relative; isolation: isolate; z-index: 0;
+  height: 320px; overflow: hidden;
   background: var(--bg-layer-floating);
   border: 1px solid var(--stroke-neutral-subtle);
   border-radius: var(--r4);
