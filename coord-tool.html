@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>참여 업체 좌표 보정 도구 (내부용) · 엔티켓 × 구월동 문화로</title>
+<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=sr3c3r0mbt&submodules=geocoder"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+         background: #f3f4f5; color: #1a1c20; line-height: 1.6; font-size: 14px; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 20px; }
+  h1 { font-size: 20px; color: #602b89; margin-bottom: 4px; }
+  .desc { font-size: 13px; color: #555d6d; margin-bottom: 16px; line-height: 1.8; }
+  .desc b { color: #602b89; }
+  .desc code { background: #f7f2fd; padding: 1px 5px; border-radius: 4px; }
+
+  .warn { font-size: 13px; color: #8a5a00; background: #fff7de; border: 1px solid #fbdc65;
+          border-radius: 8px; padding: 9px 13px; margin-bottom: 14px; }
+
+  .bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+  button { font: inherit; font-weight: 700; padding: 9px 16px; border-radius: 8px;
+           border: 1px solid #602b89; background: #602b89; color: #fff; cursor: pointer; }
+  button.ghost { background: #fff; color: #602b89; }
+  button:disabled { opacity: .45; cursor: default; }
+
+  /* 현재 지정 중인 업체 안내 */
+  .now {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    background: #602b89; color: #fff; border-radius: 10px; padding: 11px 16px; margin-bottom: 12px;
+  }
+  .now .lead { font-size: 12px; opacity: .78; }
+  .now .who { font-size: 17px; font-weight: 800; }
+  .now .addr { font-size: 13px; opacity: .85; }
+  .now .spacer { flex: 1; }
+  .now button { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.35); color: #fff; padding: 6px 12px; font-size: 13px; }
+  .now.done { background: #079171; }
+
+  .cols { display: grid; grid-template-columns: 1fr 400px; gap: 14px; align-items: start; }
+  @media (max-width: 1000px) { .cols { grid-template-columns: 1fr; } }
+  #map { width: 100%; height: 640px; border: 1px solid #dcdee3; border-radius: 12px; background: #fff;
+         position: relative; isolation: isolate; z-index: 0; cursor: crosshair; }
+  @media (max-width: 1000px) { #map { height: 440px; } }
+
+  .side { background: #fff; border: 1px solid #dcdee3; border-radius: 12px; overflow: hidden; }
+  .side h2 { font-size: 13px; padding: 10px 12px; background: #f7f2fd; color: #4d1f71; border-bottom: 1px solid #eeeff1; }
+  ul { list-style: none; max-height: 584px; overflow-y: auto; }
+  @media (max-width: 1000px) { ul { max-height: 320px; } }
+  li { padding: 9px 12px; border-bottom: 1px solid #f3f4f5; display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+  li:hover { background: #faf7fc; }
+  li.sel { background: #f0e5fc; box-shadow: inset 3px 0 0 #602b89; }
+  .no { width: 22px; height: 22px; border-radius: 50%; background: #602b89; color: #fff; font-size: 11px;
+        font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  li.fixed .no { background: #079171; }
+  .li-body { flex: 1; min-width: 0; }
+  .li-name { font-size: 13px; font-weight: 700; }
+  .li-sub { font-size: 11px; color: #868b94; }
+  .badge { font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 100px; margin-left: 5px; vertical-align: 1px; }
+  .b-orig { background: #eeeff1; color: #555d6d; }
+  .b-geo  { background: #eff6ff; color: #0b4596; }
+  .b-man  { background: #edfaf6; color: #075445; }
+  .b-err  { background: #fdf0f0; color: #921708; }
+
+  .out-head { display: flex; align-items: center; gap: 8px; margin: 16px 0 6px; }
+  .out-head h2 { font-size: 13px; color: #4d1f71; }
+  textarea { width: 100%; height: 300px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+             font-size: 12px; line-height: 1.6; padding: 12px; border: 1px solid #dcdee3;
+             border-radius: 12px; background: #fff; white-space: pre; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>참여 업체 좌표 보정 도구 (내부용)</h1>
+  <p class="desc">
+    ① <b>지오코딩 일괄 배치</b>로 주소 기준 좌표를 깔고 → ② 지도를 확대해 <b>실제 가게 아이콘 위를 클릭</b>하면 그 자리로 좌표가 잡히고 다음 업체로 자동 이동함 →
+    ③ 하단 배열을 복사해 <code>index.html</code>의 <code>STORES</code>에 붙여넣으면 됨.<br>
+    핀을 직접 끌어서 미세 조정하는 것도 됨. ※ API 키가 도메인에 묶여 있어 <b>배포된 사이트 주소로 접속해야 동작함</b>.
+  </p>
+
+  <div class="warn">저장 기능이 없음 — 새로고침하면 조정한 값이 사라짐. 작업을 마치면 반드시 하단 배열을 복사해 둘 것.</div>
+
+  <div class="now" id="now">
+    <span>
+      <span class="lead">지금 지정할 업체</span><br>
+      <span class="who" id="now-who">—</span> <span class="addr" id="now-addr"></span>
+    </span>
+    <span class="spacer"></span>
+    <button type="button" id="prev">← 이전</button>
+    <button type="button" id="skip">건너뛰기 →</button>
+  </div>
+
+  <div class="bar">
+    <button type="button" id="geo">지오코딩 일괄 배치</button>
+    <button type="button" class="ghost" id="reset">원본 좌표로 되돌리기</button>
+    <button type="button" class="ghost" id="copy">결과 배열 복사</button>
+    <span id="status" style="font-size:12px;color:#555d6d;"></span>
+  </div>
+
+  <div class="cols">
+    <div id="map"></div>
+    <div class="side">
+      <h2>참여 업체 <span id="cnt"></span>곳 — 클릭하면 그 업체로 전환됨</h2>
+      <ul id="list"></ul>
+    </div>
+  </div>
+
+  <div class="out-head"><h2>index.html에 붙여넣을 STORES 배열 (조정할 때마다 자동 갱신됨)</h2></div>
+  <textarea id="out" readonly></textarea>
+</div>
+
+<script>
+var STORES = [
+  { name:'갈매기의 꿈',        official:'갈매기의꿈',             type:'술집·포차', addr:'문화로89번길 8-3',    discount:'안주 1종 서비스', lat:37.4473474, lng:126.6986504 },
+  { name:'79포차',             official:null,                     type:'술집·포차', addr:'문화로89번길 34 1층', discount:'서비스 1종 제공', lat:37.4473163, lng:126.6973313 },
+  { name:'호동이갈비살',       official:'호동이갈비살 인천직영점', type:'고기·구이', addr:'문화로89번길 19',     discount:'10% 할인',       lat:37.4469975, lng:126.6980706 },
+  { name:'곱창들의 수다',      official:'곱창들의수다',           type:'곱창·막창', addr:'문화로89번길 32 1층', discount:'10% 할인',       lat:37.4473109, lng:126.6974621 },
+  { name:'인천집',             official:null,                     type:'한식',     addr:'문화로89번길 8-6 1층', discount:'5% 할인',        lat:37.4473778, lng:126.6988890 },
+  { name:'마포주먹고기',       official:null,                     type:'고기·구이', addr:'문화로89번길 50 1층', discount:'10% 할인',       lat:37.4474060, lng:126.6963597 },
+  { name:'종로빈대떡',         official:'더종로빈대떡',           type:'한식',     addr:'문화로89번길 35 1층', discount:'음료 1잔 서비스', lat:37.4470500, lng:126.6971800 },
+  { name:'신마포갈매기',       official:'신마포갈매기 관교점',     type:'고기·구이', addr:'문화로89번길 39',     discount:'5% 할인',        lat:37.4470700, lng:126.6969600 },
+  { name:'흥성양꼬치',         official:null,                     type:'고기·구이', addr:'문화로89번길 49 1층', discount:'10% 할인',       lat:37.4471136, lng:126.6963230 },
+  { name:'족장',               official:null,                     type:'한식',     addr:'문화로89번길 36 1층', discount:'서비스 1종 제공', lat:37.4473881, lng:126.6972152 },
+  { name:'명가양선지해장국',   official:null,                     type:'면·탕',    addr:'문화로89번길 17',     discount:'음료 1잔 서비스', lat:37.4469962, lng:126.6982332 },
+  { name:'전주보쌈',           official:null,                     type:'한식',     addr:'문화로89번길 47',     discount:'5% 할인',        lat:37.4471376, lng:126.6964892 },
+  { name:'방이샤브샤브칼국수', official:null,                     type:'면·탕',    addr:'문화로89번길 6 1층',  discount:'10% 할인',       lat:37.4471919, lng:126.6988486 },
+  { name:'까망돼지',           official:null,                     type:'고기·구이', addr:'문화로89번길 13 1층', discount:'10% 할인',       lat:37.4469315, lng:126.6984429 },
+  { name:'대구반야월막창',     official:null,                     type:'곱창·막창', addr:'문화로89번길 40',     discount:'5% 할인',        lat:37.4473580, lng:126.6969121 },
+  { name:'황소야',             official:null,                     type:'고기·구이', addr:'문화로89번길 43',     discount:'10% 할인',       lat:37.4470848, lng:126.6967371 }
+];
+var BASE = '인천 남동구 ';
+STORES.forEach(function (s) { s.orig = { lat: s.lat, lng: s.lng }; s.src = 'orig'; });
+
+var map = new naver.maps.Map('map', { center: new naver.maps.LatLng(37.44720, 126.69760), zoom: 18 });
+
+var listEl = document.getElementById('list');
+var outEl = document.getElementById('out');
+var statusEl = document.getElementById('status');
+var nowEl = document.getElementById('now');
+var cur = 0;
+document.getElementById('cnt').textContent = STORES.length;
+
+/* 핀 — 뾰족한 끝이 정확히 좌표를 가리킴(앵커가 눈에 보이게) */
+function pin(n, active) {
+  var bg = active ? '#d9480f' : '#602b89';
+  return {
+    content:
+      '<div style="position:relative;width:0;height:0;">' +
+        '<div style="position:absolute;left:-13px;top:-32px;width:26px;height:26px;border-radius:50% 50% 50% 0;' +
+        'transform:rotate(-45deg);background:' + bg + ';border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4);' +
+        'display:flex;align-items:center;justify-content:center;">' +
+          '<span style="transform:rotate(45deg);color:#fff;font:700 11px/1 sans-serif;">' + n + '</span>' +
+        '</div>' +
+        '<div style="position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:' + bg + ';box-shadow:0 0 0 2px #fff;"></div>' +
+      '</div>',
+    anchor: new naver.maps.Point(0, 0)
+  };
+}
+
+STORES.forEach(function (s, i) {
+  s.marker = new naver.maps.Marker({
+    position: new naver.maps.LatLng(s.lat, s.lng), map: map, draggable: true,
+    icon: pin(i + 1, false), title: s.name, zIndex: 10
+  });
+  naver.maps.Event.addListener(s.marker, 'dragend', function () {
+    var p = s.marker.getPosition();
+    setCoord(i, p.lat(), p.lng(), '끌어서 이동');
+  });
+  naver.maps.Event.addListener(s.marker, 'click', function () { select(i); });
+});
+
+/* 지도 클릭 → 현재 업체 좌표 지정 후 다음으로 */
+naver.maps.Event.addListener(map, 'click', function (e) {
+  setCoord(cur, e.coord.lat(), e.coord.lng(), '클릭으로 지정');
+  var next = cur + 1;
+  if (next < STORES.length) { cur = next; syncNow(); refresh(); }
+  else { cur = STORES.length - 1; syncNow(true); refresh(); }
+});
+
+function setCoord(i, lat, lng, how) {
+  var s = STORES[i];
+  s.lat = lat; s.lng = lng; s.src = 'man';
+  s.marker.setPosition(new naver.maps.LatLng(lat, lng));
+  statusEl.textContent = s.name + ' — ' + how + ' (원본에서 ' + dist(s.orig.lat, s.orig.lng, lat, lng) + 'm)';
+  refresh();
+}
+
+function dist(a1, o1, a2, o2) {
+  var R = 6371000, r = Math.PI / 180;
+  var dA = (a2 - a1) * r, dO = (o2 - o1) * r;
+  var x = Math.sin(dA/2)*Math.sin(dA/2) + Math.cos(a1*r)*Math.cos(a2*r)*Math.sin(dO/2)*Math.sin(dO/2);
+  return Math.round(R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1-x)));
+}
+
+function select(i) { cur = i; syncNow(); refresh(); map.panTo(STORES[i].marker.getPosition()); if (map.getZoom() < 19) map.setZoom(19); }
+
+function syncNow(done) {
+  var s = STORES[cur];
+  document.getElementById('now-who').textContent = (cur + 1) + '. ' + s.name;
+  document.getElementById('now-addr').textContent = s.addr;
+  nowEl.classList.toggle('done', !!done);
+  if (done) document.getElementById('now-who').textContent = '16곳 모두 지정 완료 — 아래 배열을 복사하세요';
+  if (!done) map.panTo(s.marker.getPosition());
+}
+
+document.getElementById('prev').addEventListener('click', function () { if (cur > 0) select(cur - 1); });
+document.getElementById('skip').addEventListener('click', function () { if (cur < STORES.length - 1) select(cur + 1); });
+
+var BADGE = { orig:['b-orig','원본'], geo:['b-geo','지오코딩'], man:['b-man','지정 완료'], err:['b-err','조회 실패'] };
+
+function refresh() {
+  listEl.innerHTML = '';
+  STORES.forEach(function (s, i) {
+    var moved = dist(s.orig.lat, s.orig.lng, s.lat, s.lng);
+    var b = BADGE[s.src] || BADGE.orig;
+    var li = document.createElement('li');
+    li.className = (i === cur ? 'sel ' : '') + (s.src === 'man' ? 'fixed' : '');
+    li.innerHTML = '<span class="no">' + (i + 1) + '</span><span class="li-body">' +
+      '<span class="li-name">' + s.name + '<span class="badge ' + b[0] + '">' + b[1] + '</span></span><br>' +
+      '<span class="li-sub">' + s.addr + (moved ? ' · 원본에서 ' + moved + 'm' : '') + '</span></span>';
+    li.addEventListener('click', function () { select(i); });
+    listEl.appendChild(li);
+    s.marker.setIcon(pin(i + 1, i === cur));
+  });
+  outEl.value = buildArray();
+}
+
+function pad(str, len) {
+  var w = 0; for (var i = 0; i < str.length; i++) w += str.charCodeAt(i) > 127 ? 2 : 1;
+  return str + ' '.repeat(Math.max(0, len - w));
+}
+function buildArray() {
+  return 'var STORES = [\n' + STORES.map(function (s) {
+    return '  { name: ' + pad("'" + s.name + "',", 26) +
+           ' official: ' + pad(s.official ? "'" + s.official + "'," : 'null,', 22) +
+           ' type: ' + pad("'" + s.type + "',", 14) +
+           ' addr: ' + pad("'" + s.addr + "',", 26) +
+           ' discount: ' + pad("'" + s.discount + "',", 20) +
+           ' lat: ' + s.lat.toFixed(7) + ', lng: ' + s.lng.toFixed(7) + ' }';
+  }).join(',\n') + '\n];';
+}
+
+/* 지오코딩 일괄 배치 */
+function geocodeOne(q) {
+  return new Promise(function (resolve) {
+    naver.maps.Service.geocode({ query: q }, function (st, res) {
+      if (st !== naver.maps.Service.Status.OK) return resolve(null);
+      var it = (res.v2 && res.v2.addresses) || [];
+      resolve(it.length ? { lat: parseFloat(it[0].y), lng: parseFloat(it[0].x) } : null);
+    });
+  });
+}
+document.getElementById('geo').addEventListener('click', async function () {
+  this.disabled = true; var fail = 0;
+  for (var i = 0; i < STORES.length; i++) {
+    var s = STORES[i];
+    statusEl.textContent = '지오코딩 ' + (i + 1) + ' / ' + STORES.length + ' — ' + s.name;
+    var r = await geocodeOne(BASE + s.addr.replace(/\s*\d+층$/, '').trim());
+    await new Promise(function (res) { setTimeout(res, 220); });
+    if (r) { s.lat = r.lat; s.lng = r.lng; s.src = 'geo'; s.marker.setPosition(new naver.maps.LatLng(r.lat, r.lng)); }
+    else { s.src = 'err'; fail++; }
+    refresh();
+  }
+  statusEl.textContent = '지오코딩 완료' + (fail ? ' · ' + fail + '곳 실패' : '') + ' — 이제 가게 아이콘 위를 클릭해 정확히 맞추면 됨';
+  this.disabled = false;
+  cur = 0; syncNow(); refresh();
+});
+
+document.getElementById('reset').addEventListener('click', function () {
+  STORES.forEach(function (s) { s.lat = s.orig.lat; s.lng = s.orig.lng; s.src = 'orig';
+    s.marker.setPosition(new naver.maps.LatLng(s.lat, s.lng)); });
+  cur = 0; syncNow(); refresh(); statusEl.textContent = '원본 좌표로 되돌렸음';
+});
+
+document.getElementById('copy').addEventListener('click', function () {
+  var btn = this;
+  navigator.clipboard.writeText(outEl.value).then(function () {
+    btn.textContent = '복사됨 ✓'; setTimeout(function () { btn.textContent = '결과 배열 복사'; }, 1500);
+  });
+});
+
+syncNow(); refresh();
+</script>
+</body>
+</html>
