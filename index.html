@@ -455,27 +455,27 @@ footer > .layout { padding-block: var(--x8) var(--x10); display: flex; flex-dire
 
 <script>
 /* ══════════════════════════════════════════════════════════════
-   데이터 — 카드와 마커가 이 배열 하나만 참조함
-   좌표 주의: '종로빈대떡'·'신마포갈매기' 2곳은 인접 번지에서 보간한
-   추정값임. 좌표 보정 도구(coord-tool.html)로 확정 후 교체 필요.
+   데이터 — 목록과 지도 마커가 이 배열 하나만 참조함
+   좌표는 2026-08-13 네이버 지도에서 실제 가게 위치를 확인해 지정한 값임
+   (평균 6.1m 보정). 업체가 추가·이전되면 이 배열만 고치면 됨.
    ══════════════════════════════════════════════════════════════ */
 var STORES = [
-  { name:'갈매기의 꿈',        official:'갈매기의꿈',             type:'술집·포차', addr:'문화로89번길 8-3',    discount:'안주 1종 서비스', lat:37.4473474, lng:126.6986504 },
-  { name:'79포차',             official:null,                     type:'술집·포차', addr:'문화로89번길 34 1층', discount:'서비스 1종 제공', lat:37.4473163, lng:126.6973313 },
-  { name:'호동이갈비살',       official:'호동이갈비살 인천직영점', type:'고기·구이', addr:'문화로89번길 19',     discount:'10% 할인',       lat:37.4469975, lng:126.6980706 },
-  { name:'곱창들의 수다',      official:'곱창들의수다',           type:'곱창·막창', addr:'문화로89번길 32 1층', discount:'10% 할인',       lat:37.4473109, lng:126.6974621 },
-  { name:'인천집',             official:null,                     type:'한식',     addr:'문화로89번길 8-6 1층', discount:'5% 할인',        lat:37.4473778, lng:126.6988890 },
-  { name:'마포주먹고기',       official:null,                     type:'고기·구이', addr:'문화로89번길 50 1층', discount:'10% 할인',       lat:37.4474060, lng:126.6963597 },
-  { name:'종로빈대떡',         official:'더종로빈대떡',           type:'한식',     addr:'문화로89번길 35 1층', discount:'음료 1잔 서비스', lat:37.4470500, lng:126.6971800 },
-  { name:'신마포갈매기',       official:'신마포갈매기 관교점',     type:'고기·구이', addr:'문화로89번길 39',     discount:'5% 할인',        lat:37.4470700, lng:126.6969600 },
-  { name:'흥성양꼬치',         official:null,                     type:'고기·구이', addr:'문화로89번길 49 1층', discount:'10% 할인',       lat:37.4471136, lng:126.6963230 },
-  { name:'족장',               official:null,                     type:'한식',     addr:'문화로89번길 36 1층', discount:'서비스 1종 제공', lat:37.4473881, lng:126.6972152 },
-  { name:'명가양선지해장국',   official:null,                     type:'면·탕',    addr:'문화로89번길 17',     discount:'음료 1잔 서비스', lat:37.4469962, lng:126.6982332 },
-  { name:'전주보쌈',           official:null,                     type:'한식',     addr:'문화로89번길 47',     discount:'5% 할인',        lat:37.4471376, lng:126.6964892 },
-  { name:'방이샤브샤브칼국수', official:null,                     type:'면·탕',    addr:'문화로89번길 6 1층',  discount:'10% 할인',       lat:37.4471919, lng:126.6988486 },
-  { name:'까망돼지',           official:null,                     type:'고기·구이', addr:'문화로89번길 13 1층', discount:'10% 할인',       lat:37.4469315, lng:126.6984429 },
-  { name:'대구반야월막창',     official:null,                     type:'곱창·막창', addr:'문화로89번길 40',     discount:'5% 할인',        lat:37.4473580, lng:126.6969121 },
-  { name:'황소야',             official:null,                     type:'고기·구이', addr:'문화로89번길 43',     discount:'10% 할인',       lat:37.4470848, lng:126.6967371 }
+  { name: '갈매기의 꿈',             official: '갈매기의꿈',          type: '술집·포차',  addr: '문화로89번길 8-3',        discount: '안주 1종 서비스',   lat: 37.4474199, lng: 126.6986913 },
+  { name: '79포차',                  official: null,                  type: '술집·포차',  addr: '문화로89번길 34 1층',     discount: '서비스 1종 제공',   lat: 37.4473706, lng: 126.6973393 },
+  { name: '호동이갈비살',            official: '호동이갈비살 인천직영점', type: '고기·구이',  addr: '문화로89번길 19',         discount: '10% 할인',          lat: 37.4470528, lng: 126.6981121 },
+  { name: '곱창들의 수다',           official: '곱창들의수다',        type: '곱창·막창',  addr: '문화로89번길 32 1층',     discount: '10% 할인',          lat: 37.4473333, lng: 126.6975144 },
+  { name: '인천집',                  official: null,                  type: '한식',        addr: '문화로89번길 8-6 1층',    discount: '5% 할인',           lat: 37.4473512, lng: 126.6988649 },
+  { name: '마포주먹고기',            official: null,                  type: '고기·구이',  addr: '문화로89번길 50 1층',     discount: '10% 할인',          lat: 37.4474379, lng: 126.6963356 },
+  { name: '종로빈대떡',              official: '더종로빈대떡',        type: '한식',        addr: '문화로89번길 35 1층',     discount: '음료 1잔 서비스',   lat: 37.4470702, lng: 126.6971773 },
+  { name: '신마포갈매기',            official: '신마포갈매기 관교점', type: '고기·구이',  addr: '문화로89번길 39',         discount: '5% 할인',           lat: 37.4471573, lng: 126.6968889 },
+  { name: '흥성양꼬치',              official: null,                  type: '고기·구이',  addr: '문화로89번길 49 1층',     discount: '10% 할인',          lat: 37.4471913, lng: 126.6963525 },
+  { name: '족장',                    official: null,                  type: '한식',        addr: '문화로89번길 36 1층',     discount: '서비스 1종 제공',   lat: 37.4473476, lng: 126.6972125 },
+  { name: '명가양선지해장국',        official: null,                  type: '면·탕',      addr: '문화로89번길 17',         discount: '음료 1잔 서비스',   lat: 37.4470335, lng: 126.6982064 },
+  { name: '전주보쌈',                official: null,                  type: '한식',        addr: '문화로89번길 47',         discount: '5% 할인',           lat: 37.4471929, lng: 126.6964919 },
+  { name: '방이샤브샤브칼국수',      official: null,                  type: '면·탕',      addr: '문화로89번길 6 1층',      discount: '10% 할인',          lat: 37.4472228, lng: 126.6988660 },
+  { name: '까망돼지',                official: null,                  type: '고기·구이',  addr: '문화로89번길 13 1층',     discount: '10% 할인',          lat: 37.4470103, lng: 126.6984791 },
+  { name: '대구반야월막창',          official: null,                  type: '곱창·막창',  addr: '문화로89번길 40',         discount: '5% 할인',           lat: 37.4473825, lng: 126.6969349 },
+  { name: '황소야',                  official: null,                  type: '고기·구이',  addr: '문화로89번길 43',         discount: '10% 할인',          lat: 37.4471540, lng: 126.6967612 }
 ];
 
 /* 업종 아이콘 — 굵은 선·둥근 실루엣·간결한 메타포 원리로 새로 그림 */
