@@ -4,9 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>공연 관람객 맛집 할인 혜택 | 엔티켓 × 구월동 문화로</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<meta name="description" content="인천문화예술회관 공연 티켓을 제시하면 구월동 문화로 참여 업체 16곳에서 할인·서비스 혜택을 받으실 수 있습니다.">
+
+<!-- 공유 메타태그 -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="엔티켓">
+<meta property="og:title" content="공연 보고, 맛있게 드세요 | 엔티켓 × 구월동 문화로">
+<meta property="og:description" content="인천문화예술회관 공연 티켓 제시 시 구월동 문화로 참여 업체 16곳에서 할인·서비스 혜택 제공">
+<meta property="og:image" content="https://jikanonanoru104.github.io/restaurant/og-image.jpg">
+<meta property="og:url" content="https://jikanonanoru104.github.io/restaurant/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="공연 보고, 맛있게 드세요 | 엔티켓 × 구월동 문화로">
+<meta name="twitter:description" content="공연 티켓 제시 시 구월동 문화로 참여 업체 16곳 할인·서비스 혜택">
+<meta name="twitter:image" content="https://jikanonanoru104.github.io/restaurant/og-image.jpg">
+<meta name="theme-color" content="#602b89">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.css" rel="stylesheet">
 <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=sr3c3r0mbt"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -21,345 +35,332 @@
     --white: #FFFFFF;
     --radius: 12px;
   }
-  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px; }
-  header { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; }
-  .logo { font-size: 15px; font-weight: 700; color: var(--primary); letter-spacing: -0.3px; }
-  .logo span { color: var(--text-muted); font-weight: 400; font-size: 13px; margin-left: 6px; }
-  .hero { background: var(--primary); color: white; padding: 2.5rem 1.5rem 2rem; text-align: center; }
-  .hero-badge { display: inline-block; background: rgba(255,255,255,0.2); color: white; font-size: 16px; font-weight: 500; padding: 4px 12px; border-radius: 100px; margin-bottom: 14px; letter-spacing: 0.3px; }
-  .hero h1 { font-size: 29px; font-weight: 700; line-height: 1.4; margin-bottom: 10px; letter-spacing: -0.5px; }
-  .hero p { font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.7; max-width: 360px; margin: 0 auto; }
-  .container { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
-  .section-title { font-size: 13px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.3px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .map-wrap { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-bottom: 2rem; height: 300px; position: relative; }
-  #map { width: 100%; height: 100%; }
-  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-bottom: 1rem; }
-  .card.hidden { display: none; }
-  .more-btn { display: block; width: 100%; padding: 0.75rem; margin-bottom: 2rem; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-weight: 500; color: var(--text-muted); cursor: pointer; text-align: center; transition: background 0.15s; }
-  .more-btn:hover { background: var(--bg); }
-  .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; display: flex; align-items: flex-start; gap: 14px; transition: box-shadow 0.15s, border-color 0.15s; cursor: pointer; }
-  .card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-  .card.active { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-light); }
-  .card-emoji { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
-  .card-body { flex: 1; min-width: 0; }
-  .card-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
-  .card-addr { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
-  .card-discount { display: inline-block; background: var(--primary-light); color: var(--primary-dark); font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 6px; margin-bottom: 5px; }
+  body {
+    font-family: 'NanumSquare', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px;
+    -webkit-text-size-adjust: 100%;
+  }
+  a { color: inherit; }
+  .skip-link { position: absolute; left: -9999px; }
+  .skip-link:focus { left: 8px; top: 8px; z-index: 999; background: var(--white); padding: 8px 14px; border-radius: 8px; border: 2px solid var(--primary); }
 
-  .notice { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.25rem; }
-  .notice-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
-  .notice ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
-  .notice li { font-size: 13px; color: var(--text-muted); padding-left: 14px; position: relative; line-height: 1.6; }
-  .notice li::before { content: '·'; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
-  footer { text-align: center; padding: 1.5rem; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); background: var(--white); }
-  @media (max-width: 480px) { .hero h1 { font-size: 19px; } .card-grid { grid-template-columns: 1fr; } }
+  header { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; }
+  .logo { font-size: 15px; font-weight: 700; color: var(--primary); letter-spacing: -0.3px; display: flex; align-items: center; }
+  .logo img { height: 28px; vertical-align: middle; }
+  .logo .partner { color: var(--text-muted); font-weight: 400; font-size: 13px; margin-left: 8px; }
+
+  /* 히어로 — 문구가 포함된 배너 이미지로 대체함. 데스크톱/모바일 2벌을 picture로 분기 */
+  .hero { background: #161B1F; line-height: 0; }
+  .hero picture, .hero img { display: block; width: 100%; height: auto; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+  .container { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+  .section-title { font-size: 13px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.3px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .map-wrap { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-bottom: 2rem; height: 300px; position: relative; background: var(--white); }
+  #map { width: 100%; height: 100%; }
+
+  /* 업종 필터 */
+  .filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .filter-chip { font-family: inherit; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 100px; border: 1px solid var(--border); background: var(--white); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+  .filter-chip:hover { border-color: var(--primary); color: var(--primary); }
+  .filter-chip[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--white); }
+
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-bottom: 1rem; list-style: none; }
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; display: flex; align-items: flex-start; gap: 14px; transition: box-shadow 0.15s, border-color 0.15s; cursor: pointer; width: 100%; text-align: left; font-family: inherit; }
+  .card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .card:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .card.active { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-light); }
+  .card[hidden] { display: none; }
+  .card-emoji { font-size: 28px; flex-shrink: 0; margin-top: 2px; line-height: 1; }
+  .card-body { flex: 1; min-width: 0; }
+  .card-name { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+  .card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .card-tag { font-size: 11px; font-weight: 700; color: var(--primary-dark); background: var(--primary-light); padding: 2px 8px; border-radius: 100px; }
+  .card-addr { font-size: 11px; color: var(--text-muted); }
+  .card-discount { display: inline-block; background: var(--primary); color: var(--white); font-size: 13px; font-weight: 800; padding: 4px 12px; border-radius: 6px; }
+
+  .more-btn { display: block; width: 100%; padding: 0.8rem; margin-bottom: 2rem; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-weight: 700; font-family: inherit; color: var(--text-muted); cursor: pointer; text-align: center; transition: background 0.15s; }
+  .more-btn:hover { background: var(--bg); }
+  .empty { text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 14px; }
+
+  .panel { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.25rem; margin-bottom: 2rem; }
+  .panel-title { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+  .panel p { font-size: 13px; color: var(--text-muted); line-height: 1.75; }
+  .panel ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .panel li { font-size: 13px; color: var(--text-muted); padding-left: 14px; position: relative; line-height: 1.6; }
+  .panel li::before { content: '·'; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+  .panel a { color: var(--primary); font-weight: 700; text-decoration: none; }
+  .panel a:hover { text-decoration: underline; }
+
+  .updated { font-size: 12px; color: var(--text-muted); text-align: right; margin-bottom: 1.5rem; }
+  footer { text-align: center; padding: 1.5rem; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); background: var(--white); line-height: 1.8; }
+
+  @media (max-width: 768px) {
+    .container { padding: 1.25rem 1rem 3rem; }
+    .card-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .logo .partner { font-size: 11px; }
+  }
 </style>
 </head>
 <body>
 
-<header>
+<a class="skip-link" href="#list">참여 업체 목록으로 건너뛰기</a>
 
-<div class="logo">
-<a href="https://www.enticket.com:469/" target="_blank" style="text-decoration:none;">
-    <img src="logo.png" alt="엔티켓" style="height:28px; vertical-align:middle;">
-  </a>
-<span style="vertical-align:middle;"> x &nbsp; 구월동 문화로 상인회</span>
-</div>
+<header>
+  <div class="logo">
+    <a href="https://www.enticket.com:469/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;">
+      <img src="logo.png" alt="엔티켓">
+    </a>
+    <span class="partner">× 구월동 문화로 상인회</span>
+  </div>
 </header>
 
 <div class="hero">
-  <div class="hero-badge">🎭 공연 관람객 특별 혜택</div>
-  <h1>인천문화예술회관 공연 티켓 소지 시<br>주변 맛집 할인 혜택을 드립니다</h1>
-  <p>구월동 문화로 참여 업체에서 공연 당일 티켓을 제시하시면<br>다양한 혜택을 받으실 수 있습니다.</p>
+  <h1 class="sr-only">인천문화예술회관 공연 티켓 소지 시 주변 맛집 할인 혜택을 드립니다 — 구월동 문화로 참여 업체에서 공연 당일 티켓을 제시하시면 다양한 혜택을 받으실 수 있습니다.</h1>
+  <picture>
+    <source media="(max-width: 767px)" type="image/webp" srcset="hero-mobile.webp" width="828" height="760">
+    <source media="(max-width: 767px)" type="image/jpeg" srcset="hero-mobile.jpg" width="828" height="760">
+    <source type="image/webp" srcset="hero-desktop.webp" width="2400" height="700">
+    <img src="hero-desktop.jpg" width="2400" height="700" fetchpriority="high" decoding="async"
+         alt="공연 관람객 특별 혜택 — 인천문화예술회관 공연 티켓 소지 시 주변 맛집 할인 혜택을 드립니다">
+  </picture>
 </div>
 
 <div class="container">
 
-  <div class="section-title">📍 참여 업체 위치</div>
+  <h2 class="section-title">📍 참여 업체 위치</h2>
   <div class="map-wrap">
-    <div id="map"></div>
+    <div id="map" role="application" aria-label="참여 업체 위치 지도"></div>
   </div>
 
-  <div class="section-title">🍽️ 참여 업체 할인 혜택</div>
-  <div class="card-grid">
+  <h2 class="section-title" id="list">🍽️ 참여 업체 할인 혜택</h2>
 
-    <div class="card">
-      <div class="card-emoji">🍶</div>
-      <div class="card-body">
-        <div class="card-name">갈매기의 꿈</div>
-        <div class="card-addr">문화로89번길 8-3</div>
-        <div class="card-discount">안주 1종 서비스</div>
-      </div>
-    </div>
+  <div class="filters" role="group" aria-label="업종 필터"></div>
+  <ul class="card-grid" id="card-grid"></ul>
+  <p class="empty" id="empty" hidden>해당 업종의 참여 업체가 없습니다.</p>
 
-    <div class="card">
-      <div class="card-emoji">🏮</div>
-      <div class="card-body">
-        <div class="card-name">79포차</div>
-        <div class="card-addr">문화로89번길 34 1층</div>
-        <div class="card-discount">서비스 1종 제공</div>
-      </div>
-    </div>
+  <button class="more-btn" id="toggle-btn" type="button"></button>
 
-    <div class="card">
-      <div class="card-emoji">🥩</div>
-      <div class="card-body">
-        <div class="card-name">호동이갈비살</div>
-        <div class="card-addr">문화로89번길 19</div>
-        <div class="card-discount">10% 할인</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-emoji">🔥</div>
-      <div class="card-body">
-        <div class="card-name">곱창들의 수다</div>
-        <div class="card-addr">문화로89번길 32 1층</div>
-        <div class="card-discount">10% 할인</div>
-      </div>
-    </div>
-
-    <div class="card hidden">
-      <div class="card-emoji">🐟</div>
-      <div class="card-body">
-        <div class="card-name">인천집</div>
-        <div class="card-addr">문화로89번길 8-6 1층</div>
-        <div class="card-discount">5% 할인</div>
-      </div>
-    </div>
-
-    <div class="card hidden">
-      <div class="card-emoji">🥓</div>
-      <div class="card-body">
-        <div class="card-name">마포주먹고기</div>
-        <div class="card-addr">문화로89번길 50 1층</div>
-        <div class="card-discount">10% 할인</div>
-      </div>
-    </div>
-
-    <div class="card hidden">
-      <div class="card-emoji">🥞</div>
-      <div class="card-body">
-        <div class="card-name">종로빈대떡</div>
-        <div class="card-addr">문화로89번길 35 1층</div>
-        <div class="card-discount">음료 1잔 서비스</div>
-      </div>
-    </div>
-
-    <div class="card hidden">
-      <div class="card-emoji">🐦</div>
-      <div class="card-body">
-        <div class="card-name">신마포갈매기</div>
-        <div class="card-addr">문화로89번길 39</div>
-        <div class="card-discount">5% 할인</div>
-      </div>
-    </div>
-
-    <div class="card hidden">
-      <div class="card-emoji">🍢</div>
-      <div class="card-body">
-        <div class="card-name">흥성양꼬치</div>
-        <div class="card-addr">문화로89번길 49 1층</div>
-        <div class="card-discount">10% 할인</div>
-      </div>
-    </div>
-
-    <div class="card hidden">
-      <div class="card-emoji">🐷</div>
-      <div class="card-body">
-        <div class="card-name">족장</div>
-        <div class="card-addr">문화로89번길 36 1층</div>
-        <div class="card-discount">서비스 1종 제공</div>
-      </div>
-    </div>
-
-    <div class="card hidden">
-      <div class="card-emoji">🍲</div>
-      <div class="card-body">
-        <div class="card-name">명가양선지해장국</div>
-        <div class="card-addr">문화로89번길 17</div>
-        <div class="card-discount">음료 1잔 서비스</div>
-      </div>
-    </div>
-
-    <div class="card hidden">
-      <div class="card-emoji">🥬</div>
-      <div class="card-body">
-        <div class="card-name">전주보쌈</div>
-        <div class="card-addr">문화로89번길 47</div>
-        <div class="card-discount">5% 할인</div>
-      </div>
-    </div>
-
-    <div class="card hidden">
-      <div class="card-emoji">🍜</div>
-      <div class="card-body">
-        <div class="card-name">방이샤브샤브칼국수</div>
-        <div class="card-addr">문화로89번길 6 1층</div>
-        <div class="card-discount">10% 할인</div>
-      </div>
-    </div>
-
-    <div class="card hidden">
-      <div class="card-emoji">🐖</div>
-      <div class="card-body">
-        <div class="card-name">까망돼지</div>
-        <div class="card-addr">문화로89번길 13 1층</div>
-        <div class="card-discount">10% 할인</div>
-      </div>
-    </div>
-
-    <div class="card hidden">
-      <div class="card-emoji">🍖</div>
-      <div class="card-body">
-        <div class="card-name">대구반야월막창</div>
-        <div class="card-addr">문화로89번길 40</div>
-        <div class="card-discount">5% 할인</div>
-      </div>
-    </div>
-
-    <div class="card hidden">
-      <div class="card-emoji">🐄</div>
-      <div class="card-body">
-        <div class="card-name">황소야</div>
-        <div class="card-addr">문화로89번길 43</div>
-        <div class="card-discount">10% 할인</div>
-      </div>
-    </div>
-
-  </div>
-
-  <button class="more-btn" id="more-btn" onclick="showAll()">▼ 참여 업체 더보기 (<span id="hidden-count"></span>개)</button>
-  <button class="more-btn" id="less-btn" style="display:none;" onclick="hideAll()">▲ 접기</button>
-
-  <div class="section-title">📋 안내사항</div>
-  <div class="notice">
-    <div class="notice-title">혜택 이용 전 꼭 확인해 주세요</div>
+  <h2 class="section-title">📋 안내사항</h2>
+  <div class="panel">
+    <div class="panel-title">혜택 이용 전 꼭 확인해 주세요</div>
     <ul>
       <li>엔티켓에서 예매한 공연 티켓(모바일 또는 실물) 제시 시에만 혜택이 적용됩니다.</li>
       <li>혜택은 공연 당일에 한하여 적용됩니다.</li>
       <li>업체 사정에 따라 할인 혜택이 변경되거나 조기 종료될 수 있습니다.</li>
       <li>타 할인·쿠폰과 중복 적용이 되지 않을 수 있습니다.</li>
-      <li>문의: 엔티켓 고객센터 1588-2341</li>
+      <li>문의: 엔티켓 고객센터 <a href="tel:15882341">1588-2341</a></li>
     </ul>
   </div>
+
+  <h2 class="section-title">🏘️ 구월동 문화로</h2>
+  <div class="panel">
+    <p>인천문화예술회관 건너편에서 수협 사거리까지 이어지는 구월동 문화로 일대는 남동구를 대표하는 음식문화거리입니다. 2001년 특색음식거리로 지정된 뒤 2014년 외국인 특화거리로 조성되었으며, 약 450m 구간에 고깃집·곱창집·포차·한식당이 밀집해 있습니다. 공연이 끝난 뒤 걸어서 닿는 거리에 있어 관람 전후 식사 장소로 이용하기 좋습니다.</p>
+  </div>
+
+  <p class="updated">최종 업데이트 2026-08-12 · 참여 업체 <span id="total-count"></span>곳</p>
 
 </div>
 
 <footer>
-  © 엔티켓 (주)엔엔터테인먼트 · 인천광역시 남동구 문화서로4번길 66, 지하 1층
+  © 엔티켓 (주)엔엔터테인먼트<br>
+  인천광역시 남동구 문화서로4번길 66, 지하 1층
 </footer>
 
 <script>
-  // 숨겨진 카드 수 자동 계산
-  var hiddenCards = document.querySelectorAll('.card.hidden');
-  document.getElementById('hidden-count').textContent = hiddenCards.length;
+/* ------------------------------------------------------------------
+   참여 업체 데이터 — 카드와 지도 마커가 이 배열 하나만 참조함
+   (기존 버전은 HTML 카드와 JS 배열을 이중 관리해 순서가 어긋나면
+    카드-마커 연동이 깨지는 구조였음)
 
-  function showAll() {
-    document.querySelectorAll('.card.hidden').forEach(function(el) {
-      el.style.display = 'flex';
+   좌표 주의: 「더종로빈대떡」·「신마포갈매기 관교점」 2곳은 인접 번지
+   좌표로부터 보간한 추정값임(coordEstimated). 현장 확인 후 교체 필요.
+------------------------------------------------------------------ */
+var STORES = [
+  { name: '갈매기의 꿈',        official: '갈매기의꿈',            emoji: '🍶', type: '술집·포차',  addr: '문화로89번길 8-3',    discount: '안주 1종 서비스', lat: 37.4473474, lng: 126.6986504 },
+  { name: '79포차',             official: null,                    emoji: '🏮', type: '술집·포차',  addr: '문화로89번길 34 1층', discount: '서비스 1종 제공', lat: 37.4473163, lng: 126.6973313 },
+  { name: '호동이갈비살',       official: '호동이갈비살 인천직영점', emoji: '🥩', type: '고기·구이',  addr: '문화로89번길 19',     discount: '10% 할인',       lat: 37.4469975, lng: 126.6980706 },
+  { name: '곱창들의 수다',      official: '곱창들의수다',          emoji: '🔥', type: '곱창·막창',  addr: '문화로89번길 32 1층', discount: '10% 할인',       lat: 37.4473109, lng: 126.6974621 },
+  { name: '인천집',             official: null,                    emoji: '🐟', type: '한식',      addr: '문화로89번길 8-6 1층', discount: '5% 할인',       lat: 37.4473778, lng: 126.6988890 },
+  { name: '마포주먹고기',       official: null,                    emoji: '🥓', type: '고기·구이',  addr: '문화로89번길 50 1층', discount: '10% 할인',       lat: 37.4474060, lng: 126.6963597 },
+  { name: '종로빈대떡',         official: '더종로빈대떡',          emoji: '🥞', type: '한식',      addr: '문화로89번길 35 1층', discount: '음료 1잔 서비스', lat: 37.4470500, lng: 126.6971800, coordEstimated: true },
+  { name: '신마포갈매기',       official: '신마포갈매기 관교점',    emoji: '🐦', type: '고기·구이',  addr: '문화로89번길 39',     discount: '5% 할인',        lat: 37.4470700, lng: 126.6969600, coordEstimated: true },
+  { name: '흥성양꼬치',         official: null,                    emoji: '🍢', type: '고기·구이',  addr: '문화로89번길 49 1층', discount: '10% 할인',       lat: 37.4471136, lng: 126.6963230 },
+  { name: '족장',               official: null,                    emoji: '🐷', type: '한식',      addr: '문화로89번길 36 1층', discount: '서비스 1종 제공', lat: 37.4473881, lng: 126.6972152 },
+  { name: '명가양선지해장국',   official: null,                    emoji: '🍲', type: '면·탕',     addr: '문화로89번길 17',     discount: '음료 1잔 서비스', lat: 37.4469962, lng: 126.6982332 },
+  { name: '전주보쌈',           official: null,                    emoji: '🥬', type: '한식',      addr: '문화로89번길 47',     discount: '5% 할인',        lat: 37.4471376, lng: 126.6964892 },
+  { name: '방이샤브샤브칼국수', official: null,                    emoji: '🍜', type: '면·탕',     addr: '문화로89번길 6 1층',  discount: '10% 할인',       lat: 37.4471919, lng: 126.6988486 },
+  { name: '까망돼지',           official: null,                    emoji: '🐖', type: '고기·구이',  addr: '문화로89번길 13 1층', discount: '10% 할인',       lat: 37.4469315, lng: 126.6984429 },
+  { name: '대구반야월막창',     official: null,                    emoji: '🍖', type: '곱창·막창',  addr: '문화로89번길 40',     discount: '5% 할인',        lat: 37.4473580, lng: 126.6969121 },
+  { name: '황소야',             official: null,                    emoji: '🐄', type: '고기·구이',  addr: '문화로89번길 43',     discount: '10% 할인',       lat: 37.4470848, lng: 126.6967371 }
+];
+
+var INITIAL_VISIBLE = 6;
+
+STORES.forEach(function (s) {
+  s.naver = 'https://map.naver.com/p/search/' + encodeURIComponent((s.official || s.name) + ' 인천 남동구 ' + s.addr);
+});
+
+/* ---------- 카드 렌더링 ---------- */
+var grid = document.getElementById('card-grid');
+var emptyMsg = document.getElementById('empty');
+var toggleBtn = document.getElementById('toggle-btn');
+var filterWrap = document.querySelector('.filters');
+var expanded = false;
+var activeFilter = '전체';
+
+document.getElementById('total-count').textContent = STORES.length;
+
+STORES.forEach(function (s, i) {
+  var li = document.createElement('li');
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'card';
+  btn.dataset.index = i;
+  btn.setAttribute('aria-label', s.name + ', ' + s.type + ', ' + s.discount + '. 지도에서 위치 보기');
+  btn.innerHTML =
+    '<span class="card-emoji" aria-hidden="true">' + s.emoji + '</span>' +
+    '<span class="card-body">' +
+      '<span class="card-name">' + s.name + '</span>' +
+      '<span class="card-meta">' +
+        '<span class="card-tag">' + s.type + '</span>' +
+        '<span class="card-addr">' + s.addr + '</span>' +
+      '</span>' +
+      '<span class="card-discount">' + s.discount + '</span>' +
+    '</span>';
+  btn.addEventListener('click', function () { focusLocation(i); });
+  li.appendChild(btn);
+  grid.appendChild(li);
+  s.el = btn;
+  s.li = li;
+});
+
+/* ---------- 업종 필터 ---------- */
+var types = ['전체'].concat(STORES.map(function (s) { return s.type; }).filter(function (v, i, a) { return a.indexOf(v) === i; }));
+types.forEach(function (t) {
+  var chip = document.createElement('button');
+  chip.type = 'button';
+  chip.className = 'filter-chip';
+  chip.textContent = t;
+  chip.setAttribute('aria-pressed', String(t === '전체'));
+  chip.addEventListener('click', function () {
+    activeFilter = t;
+    expanded = false;
+    filterWrap.querySelectorAll('.filter-chip').forEach(function (c) {
+      c.setAttribute('aria-pressed', String(c === chip));
     });
-    document.getElementById('more-btn').style.display = 'none';
-    document.getElementById('less-btn').style.display = 'block';
-  }
-
-  function hideAll() {
-    document.querySelectorAll('.card.hidden').forEach(function(el) {
-      el.style.display = 'none';
-    });
-    document.getElementById('more-btn').style.display = 'block';
-    document.getElementById('less-btn').style.display = 'none';
-  }
-
-  var map = new naver.maps.Map('map', {
-    center: new naver.maps.LatLng(37.4472, 126.6975),
-    zoom: 17,
-    mapTypeId: naver.maps.MapTypeId.NORMAL
+    render();
   });
+  filterWrap.appendChild(chip);
+});
 
-  var locations = [
-    { name: '갈매기의 꿈',        addr: '문화로89번길 8-3',   discount: '안주 1종 서비스',   lat: 37.4473474, lng: 126.6986504, naver: 'https://map.naver.com/v5/search/갈매기의꿈 인천 남동구 문화로89번길 8-3' },
-    { name: '79포차',             addr: '문화로89번길 34 1층', discount: '서비스 1종 제공',    lat: 37.4473163, lng: 126.6973313, naver: 'https://map.naver.com/v5/search/79포차 인천 남동구 문화로89번길 34' },
-    { name: '호동이갈비살',       addr: '문화로89번길 19',     discount: '10% 할인',          lat: 37.4469975, lng: 126.6980706, naver: 'https://map.naver.com/v5/search/호동이갈비살 인천 남동구 문화로89번길 19' },
-    { name: '곱창들의 수다',      addr: '문화로89번길 32 1층', discount: '10% 할인',          lat: 37.4473109, lng: 126.6974621, naver: 'https://map.naver.com/v5/search/곱창들의수다 인천 남동구 문화로89번길 32' },
-    { name: '인천집',             addr: '문화로89번길 8-6 1층',discount: '5% 할인',           lat: 37.4473778, lng: 126.6988890, naver: 'https://map.naver.com/v5/search/인천집 인천 남동구 문화로89번길 8-6' },
-    { name: '마포주먹고기',       addr: '문화로89번길 50 1층', discount: '10% 할인',          lat: 37.4474060, lng: 126.6963597, naver: 'https://map.naver.com/v5/search/마포주먹고기 인천 남동구 문화로89번길 50' },
-    { name: '종로빈대떡',         addr: '문화로89번길 35 1층', discount: '음료 1잔 서비스',   lat: 37.4472500, lng: 126.6972000, naver: 'https://map.naver.com/v5/search/종로빈대떡 인천 남동구 문화로89번길 35' },
-    { name: '신마포갈매기',       addr: '문화로89번길 39',     discount: '5% 할인',           lat: 37.4472000, lng: 126.6969000, naver: 'https://map.naver.com/v5/search/신마포갈매기 인천 남동구 문화로89번길 39' },
-    { name: '흥성양꼬치',         addr: '문화로89번길 49 1층', discount: '10% 할인',          lat: 37.4471136, lng: 126.6963230, naver: 'https://map.naver.com/v5/search/흥성양꼬치 인천 남동구 문화로89번길 49' },
-    { name: '족장',               addr: '문화로89번길 36 1층', discount: '서비스 1종 제공',   lat: 37.4473881, lng: 126.6972152, naver: 'https://map.naver.com/v5/search/족장 인천 남동구 문화로89번길 36' },
-    { name: '명가양선지해장국',   addr: '문화로89번길 17',     discount: '음료 1잔 서비스',   lat: 37.4469962, lng: 126.6982332, naver: 'https://map.naver.com/v5/search/명가양선지해장국 인천 남동구 문화로89번길 17' },
-    { name: '전주보쌈',           addr: '문화로89번길 47',     discount: '5% 할인',           lat: 37.4471376, lng: 126.6964892, naver: 'https://map.naver.com/v5/search/전주보쌈 인천 남동구 문화로89번길 47' },
-    { name: '방이샤브샤브칼국수', addr: '문화로89번길 6 1층',  discount: '10% 할인',          lat: 37.4471919, lng: 126.6988486, naver: 'https://map.naver.com/v5/search/방이샤브칼국수 인천 남동구 문화로89번길 6' },
-    { name: '까망돼지',           addr: '문화로89번길 13 1층', discount: '10% 할인',          lat: 37.4469315, lng: 126.6984429, naver: 'https://map.naver.com/v5/search/까망돼지 인천 남동구 문화로89번길 13' },
-    { name: '대구반야월막창',     addr: '문화로89번길 40',     discount: '5% 할인',           lat: 37.4473580, lng: 126.6969121, naver: 'https://map.naver.com/v5/search/대구반야월막창 인천 남동구 문화로89번길 40' },
-    { name: '황소야',             addr: '문화로89번길 43',     discount: '10% 할인',          lat: 37.4470848, lng: 126.6967371, naver: 'https://map.naver.com/v5/search/황소야 인천 남동구 문화로89번길 43' }
-  ];
+function matches(s) { return activeFilter === '전체' || s.type === activeFilter; }
 
-  var markers = [];
-  var infowindows = [];
-  var currentOpenIW = null;
-
-  locations.forEach(function(loc, i) {
-    var marker = new naver.maps.Marker({
-      position: new naver.maps.LatLng(loc.lat, loc.lng),
-      map: map,
-      title: loc.name,
-      icon: {
-        content: '<div style="width:12px;height:12px;border-radius:50%;background:#602b89;border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>',
-        anchor: new naver.maps.Point(6, 6)
-      }
-    });
-    var iwContent =
-      '<div style="padding:12px 14px;min-width:180px;font-family:\'Noto Sans KR\',sans-serif;">' +
-        '<div style="font-size:14px;font-weight:700;margin-bottom:4px;">' + loc.name + '</div>' +
-        '<div style="font-size:12px;color:#888;margin-bottom:8px;">📍 인천 남동구 ' + loc.addr + '</div>' +
-        '<div style="display:inline-block;background:#F0E6F8;color:#3F1A5C;font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;margin-bottom:10px;">' + loc.discount + '</div>' +
-        '<div><a href="' + loc.naver + '" target="_blank" style="font-size:12px;color:#03C75A;font-weight:500;text-decoration:none;">네이버지도에서 보기 →</a></div>' +
-      '</div>';
-    var infowindow = new naver.maps.InfoWindow({
-      content: iwContent,
-      borderRadius: 8,
-      borderWidth: 1,
-      borderColor: '#E5E5E5',
-      disableAnchor: false
-    });
-    naver.maps.Event.addListener(marker, 'click', function() {
-      focusLocation(i);
-    });
-    markers.push(marker);
-    infowindows.push(infowindow);
+function render() {
+  var shown = 0, total = 0;
+  STORES.forEach(function (s) {
+    if (!matches(s)) { s.li.hidden = true; s.el.hidden = true; if (s.marker) s.marker.setMap(null); return; }
+    total++;
+    var visible = expanded || total <= INITIAL_VISIBLE;
+    s.li.hidden = !visible;
+    s.el.hidden = !visible;
+    if (visible) shown++;
+    if (s.marker) s.marker.setMap(map);
   });
-
-  function focusLocation(i) {
-    // 모든 카드 active 해제
-    document.querySelectorAll('.card').forEach(function(c) { c.classList.remove('active'); });
-    // 해당 카드 active
-    var cards = document.querySelectorAll('.card');
-    if (cards[i]) cards[i].classList.add('active');
-
-    // 지도 이동
-    map.setCenter(new naver.maps.LatLng(locations[i].lat, locations[i].lng));
-    map.setZoom(19);
-
-    // 기존 인포윈도우 닫기
-    if (currentOpenIW !== null) infowindows[currentOpenIW].close();
-
-    // 해당 인포윈도우 열기
-    infowindows[i].open(map, markers[i]);
-    currentOpenIW = i;
-
-    // 지도로 스크롤
-    document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  emptyMsg.hidden = total > 0;
+  var remaining = total - shown;
+  if (total <= INITIAL_VISIBLE) {
+    toggleBtn.style.display = 'none';
+  } else {
+    toggleBtn.style.display = 'block';
+    toggleBtn.textContent = expanded ? '▲ 접기' : '▼ 참여 업체 더보기 (' + remaining + '개)';
+    toggleBtn.setAttribute('aria-expanded', String(expanded));
   }
+}
 
-  // 카드에 클릭 이벤트 연결
-  document.querySelectorAll('.card').forEach(function(card, i) {
-    card.addEventListener('click', function() {
-      focusLocation(i);
-    });
+toggleBtn.addEventListener('click', function () { expanded = !expanded; render(); });
+
+/* ---------- 지도 ----------
+   지도 API가 차단되거나 키가 만료돼도 업체 목록은 정상 동작하도록 분리함
+   (기존 버전은 스크립트 로드 실패 시 스크립트 전체가 중단돼 목록·더보기가 함께 깨졌음) */
+var map = null;
+var currentOpen = null;
+
+render();
+
+if (typeof naver !== 'undefined' && naver.maps) {
+  initMap();
+} else {
+  var mapWrap = document.querySelector('.map-wrap');
+  if (mapWrap) {
+    mapWrap.style.height = 'auto';
+    mapWrap.innerHTML = '<p class="empty">지도를 불러오지 못했습니다. 아래 목록에서 참여 업체를 확인해 주세요.</p>';
+  }
+}
+
+function initMap() {
+map = new naver.maps.Map('map', {
+  center: new naver.maps.LatLng(37.4472, 126.6975),
+  zoom: 17,
+  mapTypeId: naver.maps.MapTypeId.NORMAL
+});
+
+STORES.forEach(function (s, i) {
+  s.marker = new naver.maps.Marker({
+    position: new naver.maps.LatLng(s.lat, s.lng),
+    map: map,
+    title: s.name,
+    icon: {
+      content: '<div style="width:12px;height:12px;border-radius:50%;background:#602b89;border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>',
+      anchor: new naver.maps.Point(6, 6)
+    }
   });
+  s.infowindow = new naver.maps.InfoWindow({
+    content:
+      '<div style="padding:12px 14px;min-width:180px;font-family:NanumSquare,sans-serif;">' +
+        '<div style="font-size:14px;font-weight:800;margin-bottom:4px;">' + s.name + '</div>' +
+        '<div style="font-size:12px;color:#888;margin-bottom:8px;">📍 인천 남동구 ' + s.addr + '</div>' +
+        '<div style="display:inline-block;background:#F0E6F8;color:#3F1A5C;font-size:12px;font-weight:800;padding:2px 8px;border-radius:6px;margin-bottom:10px;">' + s.discount + '</div>' +
+        '<div><a href="' + s.naver + '" target="_blank" rel="noopener" style="font-size:12px;color:#03C75A;font-weight:700;text-decoration:none;">네이버지도에서 보기 →</a></div>' +
+      '</div>',
+    borderRadius: 8, borderWidth: 1, borderColor: '#E5E5E5', disableAnchor: false
+  });
+  naver.maps.Event.addListener(s.marker, 'click', function () { focusLocation(i); });
+});
+}
+
+function focusLocation(i) {
+  var s = STORES[i];
+
+  // 필터에 가려져 있으면 전체 보기로 되돌림
+  if (!matches(s)) {
+    activeFilter = '전체';
+    filterWrap.querySelectorAll('.filter-chip').forEach(function (c) {
+      c.setAttribute('aria-pressed', String(c.textContent === '전체'));
+    });
+  }
+  // 「더보기」에 접혀 있으면 자동으로 펼침 — 마커 클릭 시 카드가 보이지 않던 문제 보완
+  expanded = true;
+  render();
+
+  STORES.forEach(function (o) { o.el.classList.remove('active'); });
+  s.el.classList.add('active');
+
+  if (!map) { s.el.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+
+  map.setCenter(new naver.maps.LatLng(s.lat, s.lng));
+  map.setZoom(19);
+
+  if (currentOpen !== null) STORES[currentOpen].infowindow.close();
+  s.infowindow.open(map, s.marker);
+  currentOpen = i;
+
+  document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
 </script>
 
 </body>
